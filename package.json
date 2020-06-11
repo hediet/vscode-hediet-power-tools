@@ -1,0 +1,69 @@
+{
+	"name": "hediet-power-tools",
+	"private": true,
+	"displayName": "Hediet Power Tools",
+	"description": "This extension brings selected power tools to VS Code.",
+	"keywords": [
+		"power",
+		"tool",
+		"rename",
+		"lazy",
+		"cursor",
+		"multi",
+		"selection"
+	],
+	"version": "0.1.0",
+	"license": "GPL-3.0",
+	"publisher": "hediet",
+	"author": {
+		"email": "henning.dieterichs@live.de",
+		"name": "Henning Dieterichs"
+	},
+	"readme": "./README.md",
+	"engines": {
+		"vscode": "^1.30.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"repository": {
+		"url": "https://github.com/hediet/vscode-hediet-power-tools.git"
+	},
+	"main": "./out/extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "hediet-power-tools.apply-rename",
+				"title": "Hediet Power Tools: Apply Rename"
+			}
+		],
+		"keybindings": [
+			{
+				"key": "f2",
+				"command": "hediet-power-tools.apply-rename",
+				"when": "hediet-power-tools.apply-rename.applicable"
+			}
+		]
+	},
+	"scripts": {
+		"pub": "vsce publish --yarn",
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./"
+	},
+	"devDependencies": {
+		"@types/node": "^13.13.5",
+		"tslint": "^6.1.2",
+		"typescript": "^3.8.3",
+		"vscode": "^1.1.37"
+	},
+	"dependencies": {
+		"@hediet/node-reload": "0.7.3",
+		"@hediet/std": "0.6.0",
+		"@types/diff": "^4.0.2",
+		"diff": "^4.0.2"
+	}
+}
