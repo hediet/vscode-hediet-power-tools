@@ -12,6 +12,7 @@
 		"multi",
 		"selection"
 	],
+	"icon": "docs/logo.drawio.png",
 	"version": "0.1.0",
 	"license": "GPL-3.0",
 	"publisher": "hediet",
@@ -50,7 +51,7 @@
 	},
 	"scripts": {
 		"pub": "vsce publish --yarn",
-		"vscode:prepublish": "npm run compile",
+		"vscode:prepublish": "yarn run compile",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./"
 	},
