@@ -10,7 +10,7 @@ This extension provides various helper commands.
 
 -   **Hediet Power Tools: Apply Rename** (bound to F2). Renames identifiers after you already changed them.
 
-    This is incredible useful if combined with other multi cursor features.
+    This is incredible useful if combined with other multi cursor features. Should work for every language that has rename and word highlighting capabilities.
 
     ![](./docs/demo-apply-rename.gif)
 
