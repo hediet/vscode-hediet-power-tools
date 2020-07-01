@@ -34,7 +34,7 @@ export async function rename(rename: Rename): Promise<WorkspaceEdit> {
 export async function setContext(
 	key: string,
 	value: string | boolean
-): Promise<WorkspaceEdit> {
+): Promise<void> {
 	return (await commands.executeCommand("setContext", key, value)) as any;
 }
 

@@ -8,27 +8,32 @@ import {
 	Range,
 	WorkspaceEdit,
 	commands,
-	ThemeColor,
 	StatusBarAlignment,
+	languages,
 } from "vscode";
 import {
 	executeDocumentHighlights,
 	setContext,
 	renameMany,
 	Rename,
-} from "./vscode-api";
+} from "../vscode-api";
 
 const applyRenameCommandName = "hediet-power-tools.apply-rename";
 const applyRenameApplicable = "hediet-power-tools.apply-rename.applicable";
+const applyRenameCancelable = "hediet-power-tools.apply-rename.cancelable";
+const abortRenameSession = "hediet-power-tools.abort-rename-session";
 
 export class ChangeTracker {
 	public readonly dispose = Disposable.fn();
 
 	private readonly highlight = this.dispose.track(
 		window.createTextEditorDecorationType({
-			backgroundColor: new ThemeColor(
-				"peekViewEditor.matchHighlightBackground"
-			),
+			dark: {
+				border: "dashed lightgrey",
+			},
+
+			border: "dashed black",
+			borderWidth: "1px 1px 1px 1px",
 		})
 	);
 
@@ -36,7 +41,8 @@ export class ChangeTracker {
 		window.createStatusBarItem(StatusBarAlignment.Left, 10000)
 	);
 
-	private tracker: TextChangeTracker | undefined = undefined;
+	private tracker: TextChangeTracker | undefined = (global as any)
+		.lastTracker;
 	private ignoreChanges = false;
 
 	constructor() {
@@ -48,18 +54,36 @@ export class ChangeTracker {
 			commands.registerCommand(applyRenameCommandName, () =>
 				this.renameModifiedIdentifiers()
 			),
+			commands.registerCommand(abortRenameSession, () => {
+				this.tracker = undefined;
+				this.updateUI();
+			}),
+			languages.registerCodeActionsProvider(
+				{ pattern: "**/*" },
+				{
+					provideCodeActions: (doc, range, context, meta) => {
+						if (!this.tracker || this.tracker.document !== doc) {
+							return [];
+						}
+						if (!this.tracker.getTrackedSpanAt(range)) {
+							return [];
+						}
+						return [
+							{
+								title: "Apply Rename",
+								isPreferred: true,
+								command: applyRenameCommandName,
+							},
+						];
+					},
+				}
+			),
 		]);
+		this.updateUI();
 	}
 
 	private async renameModifiedIdentifiers(): Promise<void> {
 		if (!this.tracker) {
-			return;
-		}
-
-		if (this.tracker.changedTrackedSpans.length > 2) {
-			window.showErrorMessage(
-				"Cannot rename more than two tracked changes at once! Help me reach my sponsorship goal on github (10 sponsors) to fix this!"
-			);
 			return;
 		}
 
@@ -111,6 +135,21 @@ export class ChangeTracker {
 		}
 	}
 
+	private get isTrackerSelected(): boolean {
+		for (const editor of window.visibleTextEditors) {
+			if (this.tracker && editor.document === this.tracker.document) {
+				if (
+					editor.selections.some((s) =>
+						this.tracker!.getTrackedSpanAt(s)
+					)
+				) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	private updateUI(): void {
 		for (const editor of window.visibleTextEditors) {
 			if (this.tracker && editor.document === this.tracker.document) {
@@ -130,12 +169,15 @@ export class ChangeTracker {
 		}
 
 		if (this.tracker && this.tracker.changedTrackedSpans.length > 0) {
-			setContext(applyRenameApplicable, true);
+			setContext(applyRenameApplicable, this.isTrackerSelected);
+			setContext(applyRenameCancelable, true);
+
 			this.statusBarItem.command = applyRenameCommandName;
 			this.statusBarItem.text = `$(edit) Rename ${this.tracker.changedTrackedSpans.length} changes`;
 			this.statusBarItem.show();
 		} else {
 			setContext(applyRenameApplicable, false);
+			setContext(applyRenameCancelable, false);
 			this.statusBarItem.hide();
 		}
 	}
@@ -174,6 +216,8 @@ export class ChangeTracker {
 	}
 
 	private async handleSelectionChange(e: TextEditorSelectionChangeEvent) {
+		setContext(applyRenameApplicable, this.isTrackerSelected);
+
 		if (this.ignoreChanges) {
 			return;
 		}
@@ -218,6 +262,13 @@ class TextChangeTracker {
 
 	constructor(public readonly document: TextDocument) {
 		this.originalDocText = document.getText();
+		(global as any).lastTracker = this;
+	}
+
+	public getTrackedSpanAt(range: Range): TrackedSpan | undefined {
+		const start = this.document.offsetAt(range.start);
+		// const end = this.document.offsetAt(range.end);
+		return this.changedTrackedSpans.find((s) => s.contains(start));
 	}
 
 	public trackRange(rangeToTrack: {

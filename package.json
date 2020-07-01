@@ -13,7 +13,7 @@
 		"selection"
 	],
 	"icon": "docs/logo.drawio.png",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"license": "GPL-3.0",
 	"publisher": "hediet",
 	"author": {
@@ -39,21 +39,56 @@
 			{
 				"command": "hediet-power-tools.apply-rename",
 				"title": "Hediet Power Tools: Apply Rename"
+			},
+			{
+				"command": "hediet-power-tools.abort-rename-session",
+				"title": "Hediet Power Tools: Abort Rename Session"
 			}
 		],
 		"keybindings": [
 			{
-				"key": "f2",
+				"key": "shift+enter",
 				"command": "hediet-power-tools.apply-rename",
 				"when": "hediet-power-tools.apply-rename.applicable"
+			},
+			{
+				"key": "escape",
+				"command": "hediet-power-tools.abort-rename-session",
+				"when": "hediet-power-tools.apply-rename.cancelable"
 			}
-		]
+		],
+		"configuration": {
+			"title": "Hediet Power Tools",
+			"properties": {
+				"hediet-power-tools.applyRename.enabled": {
+					"type": "boolean",
+					"default": true,
+					"title": "Enables the Apply Rename feature"
+				},
+				"hediet-power-tools.stackFrameLineHighlighter.enabled": {
+					"type": "boolean",
+					"default": true,
+					"title": "Enables the Stack Frame Line Highlighter feature"
+				},
+				"hediet-power-tools.customDefinitions.enabled": {
+					"type": "boolean",
+					"default": false,
+					"title": "Enables the Custom Definitions feature"
+				},
+				"hediet-power-tools.debugAdapterLogger.enabled": {
+					"type": "boolean",
+					"default": false,
+					"title": "Enables the Debug Adapter Logger feature"
+				}
+			}
+		}
 	},
 	"scripts": {
 		"pub": "vsce publish --yarn",
-		"vscode:prepublish": "yarn run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./"
+		"package": "vsce package --yarn",
+		"vscode:prepublish": "yarn run build",
+		"build": "tsc -p ./",
+		"dev": "tsc -watch -p ./"
 	},
 	"devDependencies": {
 		"@types/node": "^13.13.5",
@@ -65,6 +100,9 @@
 		"@hediet/node-reload": "0.7.3",
 		"@hediet/std": "0.6.0",
 		"@types/diff": "^4.0.2",
-		"diff": "^4.0.2"
+		"diff": "^4.0.2",
+		"mobx": "^5.15.4",
+		"mobx-utils": "^5.6.1",
+		"gradient-color": "^2.0.1"
 	}
 }

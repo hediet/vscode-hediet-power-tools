@@ -1,0 +1,6 @@
+{
+	"hediet-power-tools.debugAdapterLogger.enabled": false,
+	"hediet-power-tools.applyRename.enabled": false,
+	"hediet-power-tools.stackFrameLineHighlighter.enabled": false,
+	"hediet-power-tools.customDefinitions.enabled": true
+}

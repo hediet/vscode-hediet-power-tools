@@ -2,7 +2,8 @@ export class MyA {
 	field = 1;
 }
 
-const x = "test";
+const m = new MyA();
+console.log(m.field);
 
 export class MyB {
 	field = 2;
