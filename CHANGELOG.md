@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.2.1]
+
+## Fixed
+
+-   Stack Frame Line Highlighter now works across multiple files.
+
 ## [0.2.0]
 
 ### Changed

@@ -19,16 +19,5 @@ async function asyncFn2() {
 function bar() {
 	console.log("foo");
 
-	a(10);
-}
-
-function a(i) {
-	if (i === 0) {
-		return 0;
-	}
-	return b(i - 1);
-}
-
-function b(i) {
-	return a(i - 1);
+	require("./lib.js").a(10);
 }

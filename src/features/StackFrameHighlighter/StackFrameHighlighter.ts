@@ -1,7 +1,7 @@
 import { Disposable } from "@hediet/std/disposable";
 import { vsCodeDebuggerView } from "./VSCodeDebugger";
-import { autorun } from "mobx";
-import { window, ThemeColor, DecorationOptions } from "vscode";
+import { autorun, observable } from "mobx";
+import { window, ThemeColor, DecorationOptions, TextEditor } from "vscode";
 // import * as gradient from "gradient-color";
 
 export class StackFrameLineHighlighter {
@@ -21,7 +21,15 @@ export class StackFrameLineHighlighter {
 		})
 	);
 
+	@observable visibleTextEditors: TextEditor[] = window.visibleTextEditors;
+
 	constructor() {
+		this.dispose.track(
+			window.onDidChangeVisibleTextEditors((editors) => {
+				this.visibleTextEditors = editors;
+			})
+		);
+
 		this.dispose.track({
 			dispose: autorun(() => {
 				let activeStackFrames = this.vsCodeDebuggerView
@@ -45,7 +53,7 @@ export class StackFrameLineHighlighter {
 					mappedStackFrames = [];
 				}
 
-				for (const editor of window.visibleTextEditors) {
+				for (const editor of this.visibleTextEditors) {
 					const stackFramesForEditor = mappedStackFrames.filter(
 						(s) => s.path === editor.document.fileName
 					);
