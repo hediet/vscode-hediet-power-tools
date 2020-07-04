@@ -27,10 +27,10 @@ This is incredible useful if combined with other multi cursor features. Should w
 
 ### Stack Frame Line Highlighter
 
-    By default, VS Code only highlights the currently executed line when debugging.
-    This feature also highlights all other lines in the call stack!
+By default, VS Code only highlights the currently executed line when debugging.
+This feature also highlights all other lines in the call stack!
 
-    ![](./docs/stack-frame-line-highlighter.gif)
+![](./docs/stack-frame-line-highlighter.gif)
 
 ## Additional Features (Disabled By Default)
 

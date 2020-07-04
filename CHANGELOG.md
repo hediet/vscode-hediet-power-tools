@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.2.3]
+
+### Fixed
+
+-   Repairs readme.
+
 ## [0.2.2]
 
 ### Added
