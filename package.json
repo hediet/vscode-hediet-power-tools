@@ -13,7 +13,7 @@
 		"selection"
 	],
 	"icon": "docs/logo.drawio.png",
-	"version": "0.2.1",
+	"version": "0.2.2",
 	"license": "GPL-3.0",
 	"publisher": "hediet",
 	"author": {
@@ -64,6 +64,15 @@
 					"type": "boolean",
 					"default": true,
 					"title": "Enables the Apply Rename feature"
+				},
+				"hediet-power-tools.applyRename.theme": {
+					"type": "string",
+					"enum": [
+						"dashed",
+						"colored"
+					],
+					"default": "dashed",
+					"title": "The theme used to highlight changed identifiers that can be renamed"
 				},
 				"hediet-power-tools.stackFrameLineHighlighter.enabled": {
 					"type": "boolean",

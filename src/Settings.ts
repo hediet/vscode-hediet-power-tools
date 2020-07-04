@@ -6,6 +6,11 @@ export class Settings {
 		{ serializer: serializerWithDefault<boolean>(true) }
 	);
 
+	public readonly applyRenameTheme = new VsCodeSetting(
+		"hediet-power-tools.applyRename.theme",
+		{ serializer: serializerWithDefault<"dashed" | "colored">("dashed") }
+	);
+
 	public readonly customDefinitionsEnabled = new VsCodeSetting(
 		"hediet-power-tools.customDefinitions.enabled",
 		{ serializer: serializerWithDefault<boolean>(false) }

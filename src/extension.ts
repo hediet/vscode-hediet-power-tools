@@ -33,7 +33,7 @@ export class Extension {
 		this.dispose.track(
 			conditional(
 				() => this.settings.applyRenameEnabled.get(),
-				() => new ChangeTracker()
+				() => new ChangeTracker(this.settings)
 			)
 		);
 		this.dispose.track(

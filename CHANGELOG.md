@@ -1,8 +1,14 @@
 # Change Log
 
+## [0.2.2]
+
+### Added
+
+-   Setting `hediet-power-tools.applyRename.theme`: Allows to customize how tracked identifiers are highlighted.
+
 ## [0.2.1]
 
-## Fixed
+### Fixed
 
 -   Stack Frame Line Highlighter now works across multiple files.
 

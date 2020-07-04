@@ -10,6 +10,7 @@ import {
 	commands,
 	StatusBarAlignment,
 	languages,
+	ThemeColor,
 } from "vscode";
 import {
 	executeDocumentHighlights,
@@ -17,6 +18,8 @@ import {
 	renameMany,
 	Rename,
 } from "../vscode-api";
+import { Settings } from "../Settings";
+import { autorun } from "mobx";
 
 const applyRenameCommandName = "hediet-power-tools.apply-rename";
 const applyRenameApplicable = "hediet-power-tools.apply-rename.applicable";
@@ -26,16 +29,27 @@ const abortRenameSession = "hediet-power-tools.abort-rename-session";
 export class ChangeTracker {
 	public readonly dispose = Disposable.fn();
 
-	private readonly highlight = this.dispose.track(
-		window.createTextEditorDecorationType({
-			dark: {
-				border: "dashed lightgrey",
-			},
+	private readonly themes = {
+		dashed: this.dispose.track(
+			window.createTextEditorDecorationType({
+				dark: {
+					border: "dashed lightgrey",
+				},
 
-			border: "dashed black",
-			borderWidth: "1px 1px 1px 1px",
-		})
-	);
+				border: "dashed black",
+				borderWidth: "1px 1px 1px 1px",
+			})
+		),
+		colored: this.dispose.track(
+			window.createTextEditorDecorationType({
+				backgroundColor: new ThemeColor(
+					"peekViewEditor.matchHighlightBackground"
+				),
+			})
+		),
+	};
+
+	private highlight = this.themes.dashed;
 
 	private readonly statusBarItem = this.dispose.track(
 		window.createStatusBarItem(StatusBarAlignment.Left, 10000)
@@ -45,8 +59,16 @@ export class ChangeTracker {
 		.lastTracker;
 	private ignoreChanges = false;
 
-	constructor() {
+	constructor(settings: Settings) {
 		this.dispose.track([
+			{
+				dispose: autorun(() => {
+					this.highlight = this.themes[
+						settings.applyRenameTheme.get()
+					];
+					this.updateUI();
+				}),
+			},
 			workspace.onDidChangeTextDocument((e) => this.handleTextChange(e)),
 			window.onDidChangeTextEditorSelection((e) =>
 				this.handleSelectionChange(e)
