@@ -1,5 +1,15 @@
 # Change Log
 
+## [0.3.0]
+
+### Added
+
+-   JSON Escape Assistant
+
+### Changed
+
+-   Only rename changed identifiers that intersect with the current selection. This prevents accidental renames.
+
 ## [0.2.3]
 
 ### Fixed

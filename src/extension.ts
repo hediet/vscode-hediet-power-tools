@@ -12,11 +12,12 @@ if (process.env.HOT_RELOAD) {
 }
 
 import { CustomDefinitions } from "./features/CustomDefinitions";
-import { ChangeTracker } from "./features/ChangeTracker";
+import { ChangeTracker } from "./features/ApplyRename";
 import { Settings } from "./Settings";
 import { autorun } from "mobx";
 import { DebugAdapterLogger } from "./features/DebugAdapterLogger";
 import { StackFrameLineHighlighter } from "./features/StackFrameHighlighter/StackFrameHighlighter";
+import { JsonEscapeAssistant } from "./features/JsonEscapeAssistant";
 
 registerUpdateReconciler(module);
 
@@ -53,6 +54,13 @@ export class Extension {
 			conditional(
 				() => this.settings.stackFrameLineHighlighterEnabled.get(),
 				() => new StackFrameLineHighlighter()
+			)
+		);
+
+		this.dispose.track(
+			conditional(
+				() => this.settings.jsonEscapeAssistantEnabled.get(),
+				() => new JsonEscapeAssistant()
 			)
 		);
 	}

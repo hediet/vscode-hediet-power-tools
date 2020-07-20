@@ -86,8 +86,15 @@ export class VsCodeDebugger {
 										startFrame: 0,
 										levels: 19,
 									});
+									extendedSession["threadId"] = threadId;
 									extendedSession["activeStackFrames"] =
 										r.stackFrames;
+									extendedSession["stoppedEventEmitter"].emit(
+										{
+											threadId,
+											stackFrames: r.stackFrames,
+										}
+									);
 								}
 							} else if (m.type === "response") {
 								if (
@@ -96,6 +103,7 @@ export class VsCodeDebugger {
 									m.command === "stepIn" ||
 									m.command === "stepOut"
 								) {
+									extendedSession["threadId"] = undefined;
 									extendedSession[
 										"activeStackFrames"
 									] = undefined;
@@ -118,7 +126,16 @@ interface StackFrame {
 }
 
 export class VsCodeDebugSession {
-	@observable protected activeStackFrames: StackFrame[] | undefined = [];
+	@observable protected activeStackFrames:
+		| StackFrame[]
+		| undefined = undefined;
+	@observable protected threadId: number | undefined = undefined;
+
+	protected readonly stoppedEventEmitter = new EventEmitter<{
+		threadId: number;
+		stackFrames: StackFrame[];
+	}>();
+	public readonly onStopped = this.stoppedEventEmitter.asEvent();
 
 	constructor(public readonly session: DebugSession) {}
 

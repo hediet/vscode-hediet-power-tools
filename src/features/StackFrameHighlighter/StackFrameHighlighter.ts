@@ -1,8 +1,18 @@
 import { Disposable } from "@hediet/std/disposable";
+import { Deferred } from "@hediet/std/synchronization";
 import { vsCodeDebuggerView } from "./VSCodeDebugger";
 import { autorun, observable } from "mobx";
-import { window, ThemeColor, DecorationOptions, TextEditor } from "vscode";
+import {
+	window,
+	ThemeColor,
+	DecorationOptions,
+	TextEditor,
+	MarkdownString,
+	commands,
+} from "vscode";
 // import * as gradient from "gradient-color";
+
+const stepOutCommand = "hediet-power-tools.stackFrameLineHighlighter.stepOut";
 
 export class StackFrameLineHighlighter {
 	public readonly dispose = Disposable.fn();
@@ -17,6 +27,7 @@ export class StackFrameLineHighlighter {
 			),
 			after: {
 				color: new ThemeColor("editorCodeLens.foreground"),
+				margin: "20px",
 			},
 		})
 	);
@@ -30,6 +41,32 @@ export class StackFrameLineHighlighter {
 			})
 		);
 
+		if (false) {
+			// https://github.com/microsoft/vscode/issues/102939
+			this.dispose.track(
+				commands.registerCommand(stepOutCommand, async (frameId) => {
+					const s = this.vsCodeDebuggerView.activeDebugSession;
+					if (!s) {
+						return;
+					}
+					const deferred = new Deferred();
+					const d = s.onStopped.sub(
+						async ({ stackFrames, threadId }) => {
+							if (stackFrames.every((f) => f.id !== frameId)) {
+								deferred.resolve();
+							} else {
+								await s.session.customRequest("stepOut", {
+									threadId,
+								});
+							}
+						}
+					);
+					await deferred;
+					d.dispose();
+				})
+			);
+		}
+
 		this.dispose.track({
 			dispose: autorun(() => {
 				let activeStackFrames = this.vsCodeDebuggerView
@@ -39,6 +76,7 @@ export class StackFrameLineHighlighter {
 					path: string;
 					line: number;
 					stackFramesUp: number;
+					frameId: number;
 				}[];
 				if (activeStackFrames) {
 					mappedStackFrames = activeStackFrames
@@ -47,6 +85,7 @@ export class StackFrameLineHighlighter {
 							path: frame.source!.path,
 							line: frame.line,
 							stackFramesUp: idx,
+							frameId: frame.id,
 						}))
 						.slice(1);
 				} else {
@@ -73,6 +112,7 @@ export class StackFrameLineHighlighter {
 									Number.MAX_SAFE_INTEGER
 								),
 							recursionCount: frames.length,
+							latestFrameId: frames[frames.length - 1].frameId,
 						})
 					);
 
@@ -81,15 +121,31 @@ export class StackFrameLineHighlighter {
 						Math.max(decorations.length, 3)
 					);*/
 
+					function getHoverMessage(
+						frameId: number
+					): MarkdownString | undefined {
+						return undefined;
+						// https://github.com/microsoft/vscode/issues/102939
+						const m = new MarkdownString("hello world");
+						m.isTrusted = true;
+						m.appendMarkdown(
+							`[Step Out](command:${stepOutCommand}?${encodeURIComponent(
+								JSON.stringify([frameId])
+							)})`
+						);
+						return m;
+					}
+
 					editor.setDecorations(
 						this.decoration,
 						decorations.map<DecorationOptions>((d, idx) => ({
 							range: editor.document.lineAt(d.line - 1).range,
+							hoverMessage: getHoverMessage(d.latestFrameId),
 							renderOptions: {
 								after: {
 									//backgroundColor: colors[idx],
 									//color: "white",
-									margin: "20px",
+
 									contentText:
 										`${
 											d.stackFramesUp

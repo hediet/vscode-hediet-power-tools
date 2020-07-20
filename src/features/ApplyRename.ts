@@ -74,7 +74,7 @@ export class ChangeTracker {
 				this.handleSelectionChange(e)
 			),
 			commands.registerCommand(applyRenameCommandName, () =>
-				this.renameModifiedIdentifiers()
+				this.renameSelectedModifiedIdentifiers()
 			),
 			commands.registerCommand(abortRenameSession, () => {
 				this.tracker = undefined;
@@ -104,10 +104,12 @@ export class ChangeTracker {
 		this.updateUI();
 	}
 
-	private async renameModifiedIdentifiers(): Promise<void> {
+	private async renameSelectedModifiedIdentifiers(): Promise<void> {
 		if (!this.tracker) {
 			return;
 		}
+
+		const spansToRename = this.activeTrackers;
 
 		this.ignoreChanges = true;
 		try {
@@ -116,9 +118,7 @@ export class ChangeTracker {
 
 			console.debug(
 				"Renaming " +
-					this.tracker.changedTrackedSpans.map(
-						(s) => `${s.originalText} => ${s.text}`
-					)
+					spansToRename.map((s) => `${s.originalText} => ${s.text}`)
 			);
 
 			edit.replace(
@@ -128,7 +128,7 @@ export class ChangeTracker {
 			);
 			await workspace.applyEdit(edit);
 
-			const renames = this.tracker.changedTrackedSpans.map(
+			const renames = spansToRename.map(
 				(trackedSpan) =>
 					({
 						uri: doc.uri,
@@ -157,19 +157,25 @@ export class ChangeTracker {
 		}
 	}
 
-	private get isTrackerSelected(): boolean {
+	private get activeTrackers(): TrackedSpan[] {
+		return this.selectedTrackers;
+	}
+
+	private get selectedTrackers(): TrackedSpan[] {
+		const result = new Array<TrackedSpan>();
 		for (const editor of window.visibleTextEditors) {
-			if (this.tracker && editor.document === this.tracker.document) {
-				if (
-					editor.selections.some((s) =>
-						this.tracker!.getTrackedSpanAt(s)
-					)
-				) {
-					return true;
+			const tracker = this.tracker;
+			if (tracker && editor.document === tracker.document) {
+				for (const s of editor.selections.map((s) =>
+					tracker.getTrackedSpanAt(s)
+				)) {
+					if (s && s.changed) {
+						result.push(s);
+					}
 				}
 			}
 		}
-		return false;
+		return result;
 	}
 
 	private updateUI(): void {
@@ -177,7 +183,7 @@ export class ChangeTracker {
 			if (this.tracker && editor.document === this.tracker.document) {
 				editor.setDecorations(
 					this.highlight,
-					this.tracker.changedTrackedSpans.map(
+					this.activeTrackers.map(
 						(t) =>
 							new Range(
 								editor.document.positionAt(t.start),
@@ -190,12 +196,12 @@ export class ChangeTracker {
 			}
 		}
 
-		if (this.tracker && this.tracker.changedTrackedSpans.length > 0) {
-			setContext(applyRenameApplicable, this.isTrackerSelected);
+		if (this.tracker && this.activeTrackers.length > 0) {
+			setContext(applyRenameApplicable, this.selectedTrackers.length > 0);
 			setContext(applyRenameCancelable, true);
 
 			this.statusBarItem.command = applyRenameCommandName;
-			this.statusBarItem.text = `$(edit) Rename ${this.tracker.changedTrackedSpans.length} changes`;
+			this.statusBarItem.text = `$(edit) Rename ${this.activeTrackers.length} changes`;
 			this.statusBarItem.show();
 		} else {
 			setContext(applyRenameApplicable, false);
@@ -238,7 +244,7 @@ export class ChangeTracker {
 	}
 
 	private async handleSelectionChange(e: TextEditorSelectionChangeEvent) {
-		setContext(applyRenameApplicable, this.isTrackerSelected);
+		setContext(applyRenameApplicable, this.selectedTrackers.length > 0);
 
 		if (this.ignoreChanges) {
 			return;

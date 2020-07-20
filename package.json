@@ -13,7 +13,7 @@
 		"selection"
 	],
 	"icon": "docs/logo.drawio.png",
-	"version": "0.2.3",
+	"version": "0.3.0",
 	"license": "GPL-3.0",
 	"publisher": "hediet",
 	"author": {
@@ -74,20 +74,25 @@
 					"default": "dashed",
 					"title": "The theme used to highlight changed identifiers that can be renamed"
 				},
+				"hediet-power-tools.jsonStringEscapeHelper.enabled": {
+					"type": "boolean",
+					"default": true,
+					"title": "Enables the JSON String Escape Helper"
+				},
 				"hediet-power-tools.stackFrameLineHighlighter.enabled": {
 					"type": "boolean",
 					"default": true,
-					"title": "Enables the Stack Frame Line Highlighter feature"
+					"title": "Enables the Stack Frame Line Highlighter"
 				},
 				"hediet-power-tools.customDefinitions.enabled": {
 					"type": "boolean",
 					"default": false,
-					"title": "Enables the Custom Definitions feature"
+					"title": "Enables Custom Definitions"
 				},
 				"hediet-power-tools.debugAdapterLogger.enabled": {
 					"type": "boolean",
 					"default": false,
-					"title": "Enables the Debug Adapter Logger feature"
+					"title": "Enables the Debug Adapter Logger"
 				}
 			}
 		}
@@ -110,8 +115,9 @@
 		"@hediet/std": "0.6.0",
 		"@types/diff": "^4.0.2",
 		"diff": "^4.0.2",
+		"golden-fleece": "^1.0.9",
+		"gradient-color": "^2.0.1",
 		"mobx": "^5.15.4",
-		"mobx-utils": "^5.6.1",
-		"gradient-color": "^2.0.1"
+		"mobx-utils": "^5.6.1"
 	}
 }
