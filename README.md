@@ -37,6 +37,8 @@ This is incredible useful if combined with other multi cursor features. Should w
 <br clear="right"/>
 <br />
 
+---
+
 <img align="right" src="docs/stack-frame-line-highlighter.gif" width="450">
 
 ### Stack Frame Line Highlighter
@@ -48,6 +50,8 @@ This feature also highlights all other lines in the call stack!
 
 <br clear="right"/>
 <br />
+
+---
 
 <img align="right" src="docs/json-escape-assistant.gif" width="450">
 
@@ -71,6 +75,8 @@ The JSON Escape Assistant offers the following features:
 
 Add `/* def */` before an identifier and VS Code will treat this identifier as definition for all equal identifiers.
 Useful if TypeScript screws up and gets the types wrong.
+
+---
 
 ### DAP Logger
 
