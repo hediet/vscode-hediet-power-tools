@@ -14,8 +14,6 @@ All features can be turned on and off individually!
 
 ### Apply Rename
 
--   Use `"hediet-power-tools.applyRename.enabled": false` to disable this feature.
-
 Renames identifiers after you already changed them. Bound to shift+enter if identifier at cursor has changed.
 
 This is incredible useful if combined with other multi cursor features. Should work for every language that has rename and word highlighting capabilities.
@@ -35,6 +33,8 @@ This is incredible useful if combined with other multi cursor features. Should w
 </details>
 
 <br clear="right"/>
+
+_Use `"hediet-power-tools.applyRename.enabled": false` to disable this feature._
 <br />
 
 ---
@@ -43,12 +43,12 @@ This is incredible useful if combined with other multi cursor features. Should w
 
 ### Stack Frame Line Highlighter
 
--   Use `"hediet-power-tools.stackFrameLineHighlighter.enabled": false` to disable this feature.
-
 By default, VS Code only highlights the currently executed line when debugging.
 This feature also highlights all other lines in the call stack!
 
 <br clear="right"/>
+
+_Use `"hediet-power-tools.stackFrameLineHighlighter.enabled": false` to disable this feature._
 <br />
 
 ---
@@ -56,8 +56,6 @@ This feature also highlights all other lines in the call stack!
 <img align="right" src="docs/json-escape-assistant.gif" width="450">
 
 ### JSON Escape Assistant
-
--   Use `"hediet-power-tools.jsonEscapeAssistant.enabled": false` to disable this feature.
 
 The JSON Escape Assistant offers the following features:
 
@@ -67,23 +65,25 @@ The JSON Escape Assistant offers the following features:
 
 <br clear="right"/>
 
+_Use `"hediet-power-tools.jsonEscapeAssistant.enabled": false` to disable this feature._
+
 ## Additional Features (Turned Off By Default)
 
 ### Custom Definitions
 
--   Use `"hediet-power-tools.customDefinitions.enabled": true` to enable this feature.
-
 Add `/* def */` before an identifier and VS Code will treat this identifier as definition for all equal identifiers.
 Useful if TypeScript screws up and gets the types wrong.
+
+_Use `"hediet-power-tools.customDefinitions.enabled": true` to enable this feature._
 
 ---
 
 ### DAP Logger
 
--   Use `"hediet-power-tools.debugAdapterLogger.enabled": true` to enable this feature.
-
 Adds an output channel that logs all messages from and to the debug adapter.
 Useful for debugging or evaluating what you can do with it.
+
+_Use `"hediet-power-tools.debugAdapterLogger.enabled": true` to enable this feature._
 
 ## Planned Features (Not Implemented Yet)
 
