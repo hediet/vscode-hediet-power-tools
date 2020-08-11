@@ -14,9 +14,8 @@ export class VirtualFileSystemController {
 	public readonly dispose = Disposable.fn();
 
 	private readonly fs = new VirtualFileSystemProvider();
-	public readonly scheme = "hediet-power-tools";
-
-	constructor() {
+	
+	constructor(public readonly scheme: string) {
 		this.dispose.track(
 			workspace.registerFileSystemProvider(this.scheme, this.fs, {
 				isCaseSensitive: true,

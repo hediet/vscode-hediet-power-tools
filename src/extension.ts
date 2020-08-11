@@ -18,6 +18,7 @@ import { autorun } from "mobx";
 import { DebugAdapterLogger } from "./features/DebugAdapterLogger";
 import { StackFrameLineHighlighter } from "./features/StackFrameHighlighter/StackFrameHighlighter";
 import { JsonEscapeAssistant } from "./features/JsonEscapeAssistant";
+import { BreakpointEditor } from "./features/BreakpointEditor";
 
 registerUpdateReconciler(module);
 
@@ -41,6 +42,12 @@ export class Extension {
 			conditional(
 				() => this.settings.customDefinitionsEnabled.get(),
 				() => new CustomDefinitions()
+			)
+		);
+		this.dispose.track(
+			conditional(
+				() => true,
+				() => new BreakpointEditor()
 			)
 		);
 		this.dispose.track(

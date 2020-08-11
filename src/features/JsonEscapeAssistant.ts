@@ -1,4 +1,5 @@
 import { Disposable } from "@hediet/std/disposable";
+import {} from "fs";
 import {
 	languages,
 	MarkdownString,
@@ -23,7 +24,7 @@ export class JsonEscapeAssistant {
 	public readonly dispose = Disposable.fn();
 
 	private readonly fileSystemController = this.dispose.track(
-		new VirtualFileSystemController()
+		new VirtualFileSystemController("hediet-power-tools")
 	);
 
 	constructor() {
