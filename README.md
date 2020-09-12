@@ -78,13 +78,13 @@ This feature brings advanced language features to markdown code blocks:
 -   Auto Completion
 -   Error Highlighting
 -   Go To Definition
--
 
 Internally, for a `xyz` code block, the extension creates a hidden `.xyz` document and forwards these language service requests to that document. Positions are translated accordingly.
+This feature is still experimental and might be moved to its own extension in the future.
 
 <br clear="right"/>
 
-_Use `"hediet-power-tools.markdownCodeBlockLanguageService.enabled": true` to disable this feature._
+_Use `"hediet-power-tools.markdownCodeBlockLanguageService.enabled": true` to enable this feature._
 
 ---
 
