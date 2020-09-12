@@ -19,6 +19,7 @@ import { DebugAdapterLogger } from "./features/DebugAdapterLogger";
 import { StackFrameLineHighlighter } from "./features/StackFrameHighlighter/StackFrameHighlighter";
 import { JsonEscapeAssistant } from "./features/JsonEscapeAssistant";
 import { BreakpointEditor } from "./features/BreakpointEditor";
+import { MarkdownEditorProjection } from "./features/MarkdownEditorProjection/MarkdownEditorProjection";
 
 registerUpdateReconciler(module);
 
@@ -46,8 +47,15 @@ export class Extension {
 		);
 		this.dispose.track(
 			conditional(
-				() => true,
+				() => false,
 				() => new BreakpointEditor()
+			)
+		);
+		this.dispose.track(
+			conditional(
+				() =>
+					this.settings.markdownCodeBlockLanguageServiceEnabled.get(),
+				() => new MarkdownEditorProjection()
 			)
 		);
 		this.dispose.track(

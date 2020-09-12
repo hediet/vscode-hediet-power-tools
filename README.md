@@ -69,6 +69,25 @@ _Use `"hediet-power-tools.jsonEscapeAssistant.enabled": false` to disable this f
 
 ## Additional Features (Turned Off By Default)
 
+<img align="right" src="docs/markdown-codeblocks-language-service.gif" width="450">
+
+### Rich Language Features in Markdown Code Blocks
+
+This feature brings advanced language features to markdown code blocks:
+
+-   Auto Completion
+-   Error Highlighting
+-   Go To Definition
+-
+
+Internally, for a `xyz` code block, the extension creates a hidden `.xyz` document and forwards these language service requests to that document. Positions are translated accordingly.
+
+<br clear="right"/>
+
+_Use `"hediet-power-tools.markdownCodeBlockLanguageService.enabled": true` to disable this feature._
+
+---
+
 ### Custom Definitions
 
 Add `/* def */` before an identifier and VS Code will treat this identifier as definition for all equal identifiers.

@@ -2,6 +2,12 @@ main();
 
 async function main() {
 	bar();
+	let i = 0;
+	while (i < 10) {
+		i++;
+		await new Promise((res) => setTimeout(res, 1000));
+	}
+
 	await asyncFn1();
 }
 

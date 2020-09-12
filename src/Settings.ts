@@ -21,6 +21,11 @@ export class Settings {
 		{ serializer: serializerWithDefault<boolean>(true) }
 	);
 
+	public readonly markdownCodeBlockLanguageServiceEnabled = new VsCodeSetting(
+		"hediet-power-tools.markdownCodeBlockLanguageService.enabled",
+		{ serializer: serializerWithDefault<boolean>(false) }
+	);
+
 	public readonly customDefinitionsEnabled = new VsCodeSetting(
 		"hediet-power-tools.customDefinitions.enabled",
 		{ serializer: serializerWithDefault<boolean>(false) }

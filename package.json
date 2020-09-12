@@ -22,13 +22,14 @@
 	},
 	"readme": "./README.md",
 	"engines": {
-		"vscode": "^1.30.0"
+		"vscode": "^1.40.0"
 	},
 	"categories": [
 		"Other"
 	],
 	"activationEvents": [
-		"*"
+		"*",
+		"onFileSystem:hediet-power-tools"
 	],
 	"repository": {
 		"url": "https://github.com/hediet/vscode-hediet-power-tools.git"
@@ -93,6 +94,11 @@
 					"type": "boolean",
 					"default": false,
 					"title": "Enables the Debug Adapter Logger"
+				},
+				"hediet-power-tools.markdownCodeBlockLanguageService.enabled": {
+					"type": "boolean",
+					"default": false,
+					"title": "Enables the Markdown Code Block Language Service"
 				}
 			}
 		}
@@ -106,9 +112,9 @@
 	},
 	"devDependencies": {
 		"@types/node": "^13.13.5",
+		"@types/vscode": "^1.40.0",
 		"tslint": "^6.1.2",
-		"typescript": "^3.8.3",
-		"vscode": "^1.1.37"
+		"typescript": "^3.8.3"
 	},
 	"dependencies": {
 		"@hediet/node-reload": "0.7.3",
@@ -118,6 +124,7 @@
 		"golden-fleece": "^1.0.9",
 		"gradient-color": "^2.0.1",
 		"mobx": "^5.15.4",
-		"mobx-utils": "^5.6.1"
+		"mobx-utils": "^5.6.1",
+		"remark": "^12.0.1"
 	}
 }

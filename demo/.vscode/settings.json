@@ -3,5 +3,6 @@
 	"hediet-power-tools.applyRename.enabled": true,
 	"hediet-power-tools.stackFrameLineHighlighter.enabled": true,
 	"hediet-power-tools.customDefinitions.enabled": true,
-	"hediet-power-tools.applyRename.theme": "colored"
+	"hediet-power-tools.applyRename.theme": "colored",
+	"hediet-power-tools.markdownCodeBlockLanguageService.enabled": true
 }
