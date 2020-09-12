@@ -1,11 +1,5 @@
 import { Disposable } from "@hediet/std/disposable";
-import {
-	DocumentSelector,
-	languages,
-	TextDocument,
-	window,
-	workspace,
-} from "vscode";
+import { DocumentSelector, languages, TextDocument, workspace } from "vscode";
 import { MarkdownDocumentController } from "./MarkdownDocumentController";
 
 export class MarkdownEditorProjection {
@@ -82,11 +76,13 @@ export class MarkdownEditorProjection {
 		]);
 	}
 
+	/*
 	private readonly codeBlockDecoration = this.dispose.track(
 		window.createTextEditorDecorationType({
 			backgroundColor: "red",
 		})
 	);
+	*/
 
 	private processDoc(doc: TextDocument) {
 		if (doc.languageId !== "markdown") {

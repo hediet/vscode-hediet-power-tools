@@ -1,7 +1,6 @@
 import {
 	commands,
 	CompletionList,
-	Location,
 	LocationLink,
 	Position,
 	SignatureHelp,
