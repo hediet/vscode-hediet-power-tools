@@ -70,10 +70,8 @@ export class MarkdownDocumentController {
 		const { stdout } = await promisify(exec)(
 			"git config --get core.excludesfile"
 		);
-		let file: string;
-		if (existsSync(stdout)) {
-			file = stdout;
-		} else {
+		let file: string = stdout.trim().replace("~/", homedir());
+		if !(existsSync(file)) {
 			file = join(homedir(), ".git-global-excludes-file");
 			writeFileSync(file, "", { encoding: "utf-8" });
 			spawnSync("git", ["config", "--global", "core.excludesFile", file]);
